@@ -1,0 +1,103 @@
+%第五章
+%第一节
+%一个音符在matlab中应该是一个向量
+%一.
+
+Fs=44100;   %人耳听音频率是到20kHz，44100的采样率可以重现频率低于22.05kHz的音频，覆盖正常人额能够听到的所有频率
+Ts=1/Fs;
+t=0:Ts:1;
+ft=sin(2*pi*800*t);
+sound(ft,Fs);   %sound是将数字信号转换成模拟信号，仍需要一个采样率Fs
+
+
+
+%5.1  把唱名(do,ri,mi,fa...)表示出来
+Fs=44100;   
+Ts=1/Fs;
+t=0:Ts:0.3;
+C=sin(2*pi*264.63*t);
+D=sin(2*pi*293.66*t);
+E=sin(2*pi*329.63*t);
+F=sin(2*pi*349.23*t);
+G=sin(2*pi*392*t);
+A=sin(2*pi*440*t);
+B=sin(2*pi*493.88*t);
+Chigh=sin(2*pi*523.55*t);
+
+music=[C D E F G A B Chigh];    %把他们放到一个数组里
+sound(music,Fs);
+
+
+
+
+%二.
+%5.2  用矩阵表示出音符库
+Fs=44100;
+Ts=1/Fs;
+t=0:Ts:0.5;
+K=30;                         %表示30个音符
+k=0:K-1;                      %频率
+f=220*2.^(k/12);              %获得从FA0开始的所有的频率(按照十二平均律)
+mas=sin(2*pi*kron(f',t));     %kron():将两个矩阵每个元素相乘生成新的矩阵
+
+%C调
+music_C=[mas(1,:),mas(3,:),mas(5,:),mas(6,:),mas(8,:),mas(10,:),mas(12,:),mas(13,:)];
+%F调:第九个的F对应唱名do(349.23Hz)
+music_F=[mas(5,:),mas(7,:),mas(9,:),mas(10,:),mas(12,:),mas(14,:),mas(16,:),mas(17,:)];
+
+sound(music_C,Fs);
+sound(music_F,Fs);
+
+
+%5.3  用音符库表示出'东方红'
+Fs=44100;
+Ts=1/Fs;
+t=0:Ts:0.2;
+K=30;          
+k=0:K-1;         
+f=220*2.^(k/12);
+mas=sin(2*pi*kron(f',t));
+music_red=[mas(16,:),mas(16,:),mas(18,:),mas(11,:),mas(9,:),mas(9,:),mas(6,:),mas(11,:),];
+
+sound(music_red,Fs);
+
+%5.4  用音符库表示自己的音乐
+Fs=44100;
+Ts=1/Fs;
+t=0:Ts:0.5;
+K=30;          
+k=0:K-1;         
+f=220*2.^(k/12);
+mas=sin(2*pi*kron(f',t));
+
+
+
+lalow=mas(6,:);  %6.
+cilow=mas(8,:);  %7.
+do=mas(9,:);     %1
+re=mas(11,:);    %2
+mi=mas(13,:);    %3
+fa=mas(14,:);    %4
+sol=mas(16,:);   %5
+la=mas(18,:);    %6
+ci=mas(20,:);    %7
+dohigh=mas(21,:);
+
+
+music_me1=[lalow mi mi mi fa mi mi mi fa sol la la sol sol mi mi mi];
+music_me2=[music_me1 lalow re re re mi re re mi mi sol mi sol sol cilow do lalow lalow lalow lalow lalow lalow];
+
+sound(music_me2,Fs);
+
+
+
+
+
+
+
+
+
+
+
+
+
